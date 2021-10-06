@@ -39,7 +39,13 @@ public class BattleManager : MonoBehaviour
         if (battling && defenders.childCount * invaders.childCount == 0)
         {
             battling = false;
-            SimulationManager.main.EndBattle(defenderUnits, Time.time - time);
+            SimulationManager.main.EndBattle(
+                new BattleReport()
+                {
+                    units = defenderUnits,
+                    duration = Time.time - time,
+                    isWin = defenders.childCount > 0
+                });
         }
     }
 }

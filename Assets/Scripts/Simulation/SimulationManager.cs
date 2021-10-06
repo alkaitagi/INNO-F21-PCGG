@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
@@ -6,8 +8,7 @@ public class SimulationManager : MonoBehaviour
     public SimulationConfig config;
 
     private int generation;
-    private int experiment;
-    private float currentBestTime;
+    private List<BattleReport> reports = new List<BattleReport>();
     private Unit[] defenders;
 
     private void Awake()
@@ -30,50 +31,58 @@ public class SimulationManager : MonoBehaviour
             print("Simulation ended.");
             return;
         }
-        currentBestTime = float.PositiveInfinity;
-        experiment = 0;
+        reports.Clear();
         print($"Generation {generation}.");
 
-        var invaders = GenerateInvaderUnits();
+        var invaders = GenerateInvaders();
         for (int i = 0; i < config.population; i++)
         {
             var battle = Instantiate(config.battlefield, transform);
             var index = Mathf.RoundToInt((i + 1) / 2) * (i % 2 == 0 ? 1 : -1);
             battle.transform.localPosition = index * Vector2.up;
-            battle.StartBattle(defenders, invaders);
+            battle.StartBattle(MutateDefenders(defenders), invaders);
         }
     }
 
-    public void EndBattle(Unit[] defenders, float time)
+    public void EndBattle(BattleReport report)
     {
         print("Battle ended.");
-        if (time < currentBestTime)
-        {
-            currentBestTime = time;
-            this.defenders = defenders;
-        }
-        if (++experiment == config.population)
+        reports.Add(report);
+        if (reports.Count == config.population)
         {
             foreach (Transform child in transform)
                 Destroy(child.gameObject);
+
+            if (reports.Any(r => r.isWin))
+                defenders = reports
+                    .Where(r => r.isWin)
+                    .OrderBy(r => r.duration)
+                    .First().units;
+            else
+                defenders = reports
+                    .OrderBy(r => r.duration)
+                    .Last().units;
+
             NextGeneration();
         }
     }
 
-    private Unit[] MutateDefenderArmy(Unit[] baseUnits)
+    private Unit[] MutateDefenders(Unit[] baseUnits)
     {
-        var randomUnit = () => config.defenderUnits[Random.Range(0, config.defenderUnits.Length)];
         var units = new Unit[baseUnits.Length];
         for (int i = 0; i < units.Length; i++)
+        {
+            var random = config.defenderUnits[Random.Range(0, config.defenderUnits.Length)];
             units[i] = baseUnits[i]
                 ? Random.value < config.mutationChance
-                    ? randomUnit()
+                    ? random
                     : baseUnits[i]
-                : randomUnit();
+                : random;
+        }
         return units;
     }
 
-    private Unit[] GenerateInvaderUnits()
+    private Unit[] GenerateInvaders()
     {
         var units = new Unit[config.invaderCount];
         for (int i = 0; i < config.invaderCount; i++)
