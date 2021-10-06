@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76e920544b33b9e4183cb5e6fd5515df, type: 3}
-  m_Name: Simulation config
+  m_Name: Simulation Config
   m_EditorClassIdentifier: 
-  seed: 0
   population: 5
   generations: 100
+  mutationChance: 0.2
+  seed: 0
   battlefield: {fileID: 7013242168062829772, guid: c5ab268f3b4f39c4bbcba06947bde9ad, type: 3}
-  armySize: 15
+  defenderCount: 10
   defenderUnits:
   - {fileID: 5848957808680582282, guid: fe5fc8386f1115c4d827d73c1e5f2c49, type: 3}
   - {fileID: 5864646792739810629, guid: 9a1deb7acdc5cc6418a773735313d8de, type: 3}
   - {fileID: 3087207422224644788, guid: a5f256b15eca3984782bf4a8bee20a89, type: 3}
+  invaderCount: 20
   invaderUnits:
   - {fileID: 2363541469462295791, guid: a31c67dba0f8786488ccabcad6b7cfc4, type: 3}
   - {fileID: 7741793587562750411, guid: 64ff469a89e9e0f49930986233202d32, type: 3}
   - {fileID: 7685346727300337669, guid: 960528510c2b3f4459717bbacde12f6d, type: 3}
   - {fileID: 5666153190806880288, guid: cf46d997ff400c740b57be93c7f5f548, type: 3}
-  initialMoney: 5
-  moneyPerRound: 1
