@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76e920544b33b9e4183cb5e6fd5515df, type: 3}
   m_Name: Simulation Config
   m_EditorClassIdentifier: 
-  population: 5
+  population: 10
   generations: 100
   mutationChance: 0.2
   seed: 0

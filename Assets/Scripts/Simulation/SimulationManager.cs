@@ -54,14 +54,20 @@ public class SimulationManager : MonoBehaviour
                 Destroy(child.gameObject);
 
             if (reports.Any(r => r.isWin))
+            {
                 defenders = reports
                     .Where(r => r.isWin)
                     .OrderBy(r => r.duration)
                     .First().units;
+                print("Surviours are victorious.");
+            }
             else
+            {
                 defenders = reports
                     .OrderBy(r => r.duration)
                     .Last().units;
+                print("No survivors left.");
+            }
 
             NextGeneration();
         }
