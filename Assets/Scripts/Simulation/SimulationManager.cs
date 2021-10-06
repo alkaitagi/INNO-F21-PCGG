@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
@@ -63,12 +62,14 @@ public class SimulationManager : MonoBehaviour
 
     private Unit[] MutateDefenderArmy(Unit[] baseUnits)
     {
+        var randomUnit = () => config.defenderUnits[Random.Range(0, config.defenderUnits.Length)];
         var units = new Unit[baseUnits.Length];
         for (int i = 0; i < units.Length; i++)
-            if (Random.value < 0.7)
-                units[i] = Random.value < config.mutationChance
-                    ? config.defenderUnits[Random.Range(0, config.defenderUnits.Length)]
-                    : baseUnits[i];
+            units[i] = baseUnits[i]
+                ? Random.value < config.mutationChance
+                    ? randomUnit()
+                    : baseUnits[i]
+                : randomUnit();
         return units;
     }
 
