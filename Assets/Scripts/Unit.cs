@@ -9,7 +9,6 @@ public class Unit : MonoBehaviour
     public Team team;
     public SpriteRenderer flag;
 
-
     private void Awake()
     {
         armor = GetComponent<Armor>();

@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 5574954562934657884}
   - component: {fileID: 5848957808680582281}
   m_Layer: 0
-  m_Name: Unit
+  m_Name: Creep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -222,6 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2893c389412f85418a00bfc5ce8e486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  price: 1
   team: {fileID: 0}
   flag: {fileID: 5848957808591914053}
 --- !u!114 &5848957808680582262
@@ -236,9 +237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5b22f1453de934ba5cd3f96c43e4bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 15
-  health: 15
-  deathEffect: {fileID: 0}
+  maxHealth: 10
+  health: 10
+  deathEffect: {fileID: 295162609889179738, guid: bd33a5a2e7765c34ab1b07bd9d19b358, type: 3}
 --- !u!114 &5574954562934657884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,7 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   target: {fileID: 0}
-  stoppingDistance: 0.25
+  stoppingDistance: 0.325
 --- !u!114 &5848957808680582281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,5 +269,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 5
   damage: 1
-  cooldown: 0.25
+  cooldown: 0.5
   attackEffect: {fileID: -3082309553854999391, guid: ec63531b3826f7d418dd7b245a3850d0, type: 3}
