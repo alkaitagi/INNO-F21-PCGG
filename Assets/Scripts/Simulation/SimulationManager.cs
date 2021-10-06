@@ -10,8 +10,6 @@ public class SimulationManager : MonoBehaviour
     private int experiment;
     private Army army;
 
-    private BattleManager[] battles;
-
     private void Awake()
     {
         main = this;
@@ -20,13 +18,6 @@ public class SimulationManager : MonoBehaviour
     private void Start()
     {
         generation = 0;
-        battles = Enumerable
-            .Range(0, config.population)
-            .Select(i => Instantiate(
-                config.battlefield,
-                3 * i * Vector2.up,
-                Quaternion.identity))
-            .ToArray();
         army = new Army(config.armySize, config.initialMoney);
         print($"Simulation started.");
         NextGeneration();
@@ -42,16 +33,26 @@ public class SimulationManager : MonoBehaviour
         print($"Round {generation}.");
         experiment = 0;
         var invaders = GenerateInvaderUnits();
-        foreach (var battle in battles)
+        for (int i = 0; i < config.population; i++)
+        {
+            var battle = Instantiate(config.battlefield, transform);
+            var index = Mathf.RoundToInt((i + 1) / 2) * (i % 2 == 0 ? 1 : -1);
+            battle.transform.localPosition = index * Vector2.up;
             battle.StartBattle(MutateDefenderArmy(army), invaders);
+        }
     }
 
     public void EndBattle(Army army)
     {
+        print("Battle ended.");
         if (army.worth > this.army.worth)
             this.army = army;
         if (++experiment == config.population)
+        {
+            foreach (Transform child in transform)
+                Destroy(child.gameObject);
             NextGeneration();
+        }
     }
 
     private Army MutateDefenderArmy(Army army)
@@ -78,12 +79,11 @@ public class SimulationManager : MonoBehaviour
 
     private Unit[] GenerateInvaderUnits()
     {
-        var size = (int)Mathf.Log10(1 + generation) * 10;
+        var size = (int)(Mathf.Log10(1 + generation) * 10);
+        print($"Invaders count: {size}.");
         var units = new Unit[size];
         for (int i = 0; i < units.Length; i++)
-        {
             units[i] = config.invaderUnits[Random.Range(0, config.invaderUnits.Length)];
-        }
         return units.ToArray();
     }
 
