@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e920544b33b9e4183cb5e6fd5515df, type: 3}
+  m_Name: Simulation Config
+  m_EditorClassIdentifier: 
+  seed: 0
+  population: 5
+  generations: 10
+  armySize: 5
+  defenderUnits:
+  - {fileID: 5848957808680582282, guid: fe5fc8386f1115c4d827d73c1e5f2c49, type: 3}
+  - {fileID: 5864646792739810629, guid: 9a1deb7acdc5cc6418a773735313d8de, type: 3}
+  - {fileID: 3087207422224644788, guid: a5f256b15eca3984782bf4a8bee20a89, type: 3}
+  statsScale: 0
+  invaderUnits:
+  - {fileID: 5848957808680582282, guid: fe5fc8386f1115c4d827d73c1e5f2c49, type: 3}
+  - {fileID: 5864646792739810629, guid: 9a1deb7acdc5cc6418a773735313d8de, type: 3}
+  - {fileID: 3087207422224644788, guid: a5f256b15eca3984782bf4a8bee20a89, type: 3}
+  initialMoney: 50
+  moneyPerRound: 10

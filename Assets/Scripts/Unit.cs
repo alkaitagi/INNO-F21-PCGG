@@ -5,9 +5,10 @@ public class Unit : MonoBehaviour
     private Armor armor;
     private Movement movement;
     private Weapon weapon;
+    private Team team;
 
-    public Team team;
     public SpriteRenderer flag;
+    public int price;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
+        team = GetComponentInParent<Team>();
         if (flag)
             flag.color = team.color;
     }
