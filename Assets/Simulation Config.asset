@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 0
   population: 5
-  generations: 10
+  generations: 100
   battlefield: {fileID: 7013242168062829772, guid: c5ab268f3b4f39c4bbcba06947bde9ad, type: 3}
-  armySize: 5
+  armySize: 15
   defenderUnits:
   - {fileID: 5848957808680582282, guid: fe5fc8386f1115c4d827d73c1e5f2c49, type: 3}
   - {fileID: 5864646792739810629, guid: 9a1deb7acdc5cc6418a773735313d8de, type: 3}
   - {fileID: 3087207422224644788, guid: a5f256b15eca3984782bf4a8bee20a89, type: 3}
-  statsScale: 0
   invaderUnits:
-  - {fileID: 5848957808680582282, guid: fe5fc8386f1115c4d827d73c1e5f2c49, type: 3}
-  - {fileID: 5864646792739810629, guid: 9a1deb7acdc5cc6418a773735313d8de, type: 3}
-  - {fileID: 3087207422224644788, guid: a5f256b15eca3984782bf4a8bee20a89, type: 3}
-  initialMoney: 50
-  moneyPerRound: 10
+  - {fileID: 2363541469462295791, guid: a31c67dba0f8786488ccabcad6b7cfc4, type: 3}
+  - {fileID: 7741793587562750411, guid: 64ff469a89e9e0f49930986233202d32, type: 3}
+  - {fileID: 7685346727300337669, guid: 960528510c2b3f4459717bbacde12f6d, type: 3}
+  - {fileID: 5666153190806880288, guid: cf46d997ff400c740b57be93c7f5f548, type: 3}
+  initialMoney: 5
+  moneyPerRound: 1

@@ -23,6 +23,7 @@ public class BattleManager : MonoBehaviour
         var instances = new Unit[units.Length];
         for (int i = 0; i < units.Length; i++)
         {
+            if (!units[i]) continue;
             var instance = Instantiate(units[i], parent);
             instance.transform.localPosition = 0.5f * i * Vector3.right;
             if (target

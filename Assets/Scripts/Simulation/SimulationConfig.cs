@@ -14,7 +14,7 @@ public class SimulationConfig : ScriptableObject
     public Unit[] defenderUnits;
 
     [Header("Invaders")]
-    public int statsScale;
+    public float countLogScale;
     public Unit[] invaderUnits;
 
     [Header("Economy")]

@@ -12,4 +12,5 @@ public class Army
     }
 
     public int worth => money + units.Sum(u => u?.price ?? 0);
+    public bool isDead => units.All(u => !u);
 }
