@@ -38,11 +38,8 @@ public class SimulationManager : MonoBehaviour
         }
 
         army.money += config.moneyPerRound;
-        for (int i = 0; i < army.units.Length; i++)
-        {
-            PlaceUnits(army.units, defenders);
-            PlaceUnits(army.units, invaders, defenders);
-        }
+        PlaceUnits(army.units, defenders);
+        PlaceUnits(army.units, invaders, defenders);
     }
 
     private void PlaceUnits(Unit[] units, Transform parent, Transform target = null)
