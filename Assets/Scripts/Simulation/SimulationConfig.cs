@@ -3,21 +3,20 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Simulation Config")]
 public class SimulationConfig : ScriptableObject
 {
-    [Header("Simulation")]
-    public float seed;
+    [Header("Selection")]
     public int population;
     public int generations;
+    public float mutationChance;
+
+    [Header("Battle")]
+    public float seed;
     public BattleManager battlefield;
 
     [Header("Defenders")]
-    public int armySize;
+    public int defenderCount;
     public Unit[] defenderUnits;
 
     [Header("Invaders")]
-    public float countLogScale;
+    public int invaderCount;
     public Unit[] invaderUnits;
-
-    [Header("Economy")]
-    public int initialMoney;
-    public int moneyPerRound;
 }

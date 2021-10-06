@@ -5,16 +5,16 @@ public class BattleManager : MonoBehaviour
     public Transform defenders;
     public Transform invaders;
 
-    private Unit[] survivors;
-    private Army army;
-
+    private Unit[] defenderUnits;
     private bool battling = false;
+    private float time;
 
-    public void StartBattle(Army defenderArmy, Unit[] invaderUnits)
+    public void StartBattle(Unit[] defenderUnits, Unit[] invaderUnits)
     {
         battling = true;
-        army = defenderArmy;
-        survivors = PlaceUnits(defenderArmy.units, defenders);
+        this.defenderUnits = defenderUnits;
+        time = Time.time;
+        PlaceUnits(defenderUnits, defenders);
         PlaceUnits(invaderUnits, invaders, defenders);
     }
 
@@ -39,12 +39,7 @@ public class BattleManager : MonoBehaviour
         if (battling && defenders.childCount * invaders.childCount == 0)
         {
             battling = false;
-            for (int i = 0; i < survivors.Length; i++)
-            {
-                if (!survivors[i])
-                    army.units[i] = null;
-            }
-            SimulationManager.main.EndBattle(army);
+            SimulationManager.main.EndBattle(defenderUnits, Time.time - time);
         }
     }
 }

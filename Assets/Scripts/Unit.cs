@@ -8,7 +8,6 @@ public class Unit : MonoBehaviour
     private Team team;
 
     public SpriteRenderer flag;
-    public int price;
 
     private void Awake()
     {

@@ -8,7 +8,8 @@ public class SimulationManager : MonoBehaviour
 
     private int generation;
     private int experiment;
-    private Army army;
+    private float currentBestTime;
+    private Unit[] defenders;
 
     private void Awake()
     {
@@ -17,28 +18,22 @@ public class SimulationManager : MonoBehaviour
 
     private void Start()
     {
-        generation = 0;
         print($"Simulation started.");
-        NextGeneration();
-    }
-
-    private void ResetGeneration()
-    {
         generation = 0;
-        army = new Army(config.armySize, config.initialMoney - config.moneyPerRound);
+        defenders = new Unit[config.defenderCount];
+        NextGeneration();
     }
 
     private void NextGeneration()
     {
-        if (army == null || army.isDead) ResetGeneration();
         if (++generation == config.generations)
         {
             print("Simulation ended.");
             return;
         }
+        currentBestTime = float.PositiveInfinity;
         experiment = 0;
-        army.money += config.moneyPerRound;
-        print($"Generation {generation}. Army worth: {army.worth}.");
+        print($"Generation {generation}.");
 
         var invaders = GenerateInvaderUnits();
         for (int i = 0; i < config.population; i++)
@@ -46,16 +41,18 @@ public class SimulationManager : MonoBehaviour
             var battle = Instantiate(config.battlefield, transform);
             var index = Mathf.RoundToInt((i + 1) / 2) * (i % 2 == 0 ? 1 : -1);
             battle.transform.localPosition = index * Vector2.up;
-            battle.StartBattle(MutateDefenderArmy(army), invaders);
+            battle.StartBattle(defenders, invaders);
         }
-        army = null;
     }
 
-    public void EndBattle(Army army)
+    public void EndBattle(Unit[] defenders, float time)
     {
         print("Battle ended.");
-        if (this.army == null || army.worth > this.army.worth)
-            this.army = army;
+        if (time < currentBestTime)
+        {
+            currentBestTime = time;
+            this.defenders = defenders;
+        }
         if (++experiment == config.population)
         {
             foreach (Transform child in transform)
@@ -64,42 +61,28 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    private Army MutateDefenderArmy(Army baseArmy)
+    private Unit[] MutateDefenderArmy(Unit[] baseUnits)
     {
-        var army = new Army(baseArmy.units.Length, baseArmy.money);
-        for (int i = 0; i < baseArmy.units.Length; i++)
-        {
-            if (baseArmy.units[i])
-                army.units[i] = baseArmy.units[i];
-            else
-            {
-                var available = config.defenderUnits
-                    .Where(u => u.price <= army.money)
-                    .ToArray();
-                if (available.Length > 0 && Random.value < 0.7)
-                {
-                    army.units[i] = available[Random.Range(0, available.Length)];
-                    army.money -= army.units[i].price;
-                }
-            }
-        }
-        return army;
+        var units = new Unit[baseUnits.Length];
+        for (int i = 0; i < units.Length; i++)
+            if (Random.value < 0.7)
+                units[i] = Random.value < config.mutationChance
+                    ? config.defenderUnits[Random.Range(0, config.defenderUnits.Length)]
+                    : baseUnits[i];
+        return units;
     }
 
     private Unit[] GenerateInvaderUnits()
     {
-        var log = Mathf.Log10(1 + generation);
-        var size = Mathf.RoundToInt(log * config.countLogScale);
-        print($"Invader count: {size}.");
-        var units = new Unit[size];
-        for (int i = 0; i < size; i++)
+        var units = new Unit[config.invaderCount];
+        for (int i = 0; i < config.invaderCount; i++)
         {
-            var perlin = Mathf.PerlinNoise(config.seed + generation + i + log, 0);
+            var perlin = Mathf.PerlinNoise(config.seed + generation + i, 0);
             var random = Mathf.Clamp01(perlin) - 0.0001f;
             var index = Mathf.FloorToInt(random * config.invaderUnits.Length);
             units[i] = config.invaderUnits[index];
         }
-        return units.ToArray();
+        return units;
     }
 
 }
