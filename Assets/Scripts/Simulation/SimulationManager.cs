@@ -87,10 +87,9 @@ public class SimulationManager : MonoBehaviour
         var units = new Unit[config.invaderCount];
         for (int i = 0; i < config.invaderCount; i++)
         {
-            var perlin = Mathf.PerlinNoise(config.seed + generation + i, 0);
-            var random = Mathf.Clamp01(perlin) - 0.0001f;
-            var index = Mathf.FloorToInt(random * config.invaderUnits.Length);
-            units[i] = config.invaderUnits[index];
+            // var perlin = Mathf.PerlinNoise(config.seed + generation + i, 0);
+            // var index = Mathf.RoundToInt(perlin * config.invaderUnits.Length - 1);
+            units[i] = config.invaderUnits[Random.Range(0, config.invaderUnits.Length)];
         }
         return units;
     }
