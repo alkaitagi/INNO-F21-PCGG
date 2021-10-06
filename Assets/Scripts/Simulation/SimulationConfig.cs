@@ -7,6 +7,7 @@ public class SimulationConfig : ScriptableObject
     public float seed;
     public int population;
     public int generations;
+    public BattleManager battlefield;
 
     [Header("Defenders")]
     public int armySize;

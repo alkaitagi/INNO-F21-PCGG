@@ -1,31 +1,33 @@
-using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
+    public static SimulationManager main;
     public SimulationConfig config;
 
-    [Header("Teams")]
-    public Transform defenders;
-    public Transform invaders;
-
     private int generation;
+    private int experiment;
     private Army army;
+
+    private BattleManager[] battles;
+
+    private void Awake()
+    {
+        main = this;
+    }
 
     private void Start()
     {
-        generation = 1;
-        army = new Army()
-        {
-            units = Enumerable
-                .Range(0, config.armySize)
-                .Select(_ => Random.Range(0, config.defenderUnits.Length))
-                .Select(i => config.defenderUnits[i])
-                .ToArray(),
-            money = config.initialMoney - config.moneyPerRound,
-        };
+        generation = 0;
+        battles = Enumerable
+            .Range(0, config.population)
+            .Select(i => Instantiate(
+                config.battlefield,
+                3 * i * Vector2.up,
+                Quaternion.identity))
+            .ToArray();
+        army = new Army(config.armySize, config.initialMoney);
         print($"Simulation started.");
         NextGeneration();
     }
@@ -35,31 +37,54 @@ public class SimulationManager : MonoBehaviour
         if (++generation == config.generations)
         {
             print("Simulation ended.");
+            return;
         }
-
-        army.money += config.moneyPerRound;
-        PlaceUnits(army.units, defenders);
-        PlaceUnits(army.units, invaders, defenders);
+        print($"Round {generation}.");
+        experiment = 0;
+        var invaders = GenerateInvaderUnits();
+        foreach (var battle in battles)
+            battle.StartBattle(MutateDefenderArmy(army), invaders);
     }
 
-    private void PlaceUnits(Unit[] units, Transform parent, Transform target = null)
+    public void EndBattle(Army army)
     {
+        if (army.worth > this.army.worth)
+            this.army = army;
+        if (++experiment == config.population)
+            NextGeneration();
+    }
+
+    private Army MutateDefenderArmy(Army army)
+    {
+        var newArmy = new Army(army.units.Length, army.money);
+        for (int i = 0; i < army.units.Length; i++)
+        {
+            if (army.units[i])
+                newArmy.units[i] = army.units[i];
+            else
+            {
+                var available = config.defenderUnits
+                    .Where(u => u.price <= army.money)
+                    .ToArray();
+                if (available.Length > 0)
+                {
+                    newArmy.units[i] = available[Random.Range(0, available.Length)];
+                    newArmy.money -= newArmy.units[i].price;
+                }
+            }
+        }
+        return newArmy;
+    }
+
+    private Unit[] GenerateInvaderUnits()
+    {
+        var size = (int)Mathf.Log10(1 + generation) * 10;
+        var units = new Unit[size];
         for (int i = 0; i < units.Length; i++)
         {
-            var instance = Instantiate(units[i], parent);
-            instance.transform.localPosition = 0.5f * i * Vector3.right;
-            if (target
-                && instance.GetComponent<Movement>() is Movement movement)
-                movement.target = target;
+            units[i] = config.invaderUnits[Random.Range(0, config.invaderUnits.Length)];
         }
-    }
-
-    private void FixedUpdate()
-    {
-        if (defenders.childCount * invaders.childCount == 0)
-        {
-            print("End of round.");
-        }
+        return units.ToArray();
     }
 
 }
